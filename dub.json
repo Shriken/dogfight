@@ -1,0 +1,8 @@
+{
+	"name": "dogfight",
+	"description": "A minimal D application.",
+	"copyright": "Copyright © 2016, zane",
+	"authors": ["zane"],
+	"dependencies": {
+	}
+}
