@@ -4,5 +4,7 @@
 	"copyright": "Copyright © 2016, zane",
 	"authors": ["zane"],
 	"dependencies": {
+		"derelict-sdl2": "~>1.9.7",
+		"gfm:math": "~>3.0"
 	}
 }
