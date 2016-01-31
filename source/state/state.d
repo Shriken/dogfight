@@ -8,4 +8,8 @@ class State {
 	RenderState renderState = new RenderState();
 	double fps;
 	bool running = true;
+
+	void restart() {
+		simState = new SimulationState();
+	}
 }

@@ -10,7 +10,6 @@ void handleEvent(State state, SDL_Event event) {
 			state.running = false;
 			break;
 		case SDL_KEYUP:
-		case SDL_KEYDOWN:
 			handleKey(state, event.key);
 			break;
 		default:
@@ -22,6 +21,10 @@ void handleKey(State state, SDL_KeyboardEvent event) {
 	switch (event.keysym.sym) {
 		case SDLK_q:
 			state.running = false;
+			break;
+		case SDLK_RIGHTBRACKET:
+			// restart
+			state.restart();
 			break;
 		default:
 			break;
