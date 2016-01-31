@@ -22,7 +22,7 @@ class RenderState {
 
 	void init() {
 		// set up sdl
-		if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) < 0) {
 			throw new Exception(
 				format("SDL_Init failed: %s", SDL_GetError())
 			);
