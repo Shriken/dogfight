@@ -22,7 +22,7 @@ void main(string[] args) {
 	auto state = new State();
 	state.renderState.init();
 
-	while (state.simState.running) {
+	while (state.running) {
 		// cap ticks-per-second
 		auto mt = measureTime!((TickDuration duration) {
 			state.fps = min(

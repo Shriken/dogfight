@@ -7,4 +7,5 @@ class State {
 	SimulationState simState = new SimulationState();
 	RenderState renderState = new RenderState();
 	double fps;
+	bool running = true;
 }
