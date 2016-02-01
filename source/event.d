@@ -32,6 +32,9 @@ void handleKey(State state, SDL_KeyboardEvent event) {
 		case SDLK_q:
 			state.running = false;
 			break;
+		case SDLK_d:
+			state.renderState.debugRender = !state.renderState.debugRender;
+			break;
 		case SDLK_RIGHTBRACKET:
 			// restart
 			state.restart();

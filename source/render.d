@@ -71,7 +71,7 @@ void renderPlane(State state, Plane plane) {
 			renderState,
 			to!string(plane.heading),
 			renderState.debugTextFont,
-			0, 0
+			0, 10
 		);
 	}
 }
