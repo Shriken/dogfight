@@ -1,9 +1,12 @@
 module render;
 
 import derelict.sdl2.sdl;
+import std.conv;
 import std.math;
 
 import actor.plane;
+import misc.utils;
+import render_utils;
 import state.state;
 import state.render_state;
 import types;
@@ -26,14 +29,51 @@ void renderPlane(State state, Plane plane) {
 	auto renderState = state.renderState;
 	auto heading = plane.heading;
 
+	auto headingVector = WorldDim(cos(heading), sin(heading));
+
 	// draw nose
-	auto nosePos = plane.pos + 2 * WorldDim(cos(heading), sin(heading));
+	SDL_SetRenderDrawColor(renderState.renderer, 0, 0xff, 0, 0xff);
+	auto nosePos = plane.pos + 2 * headingVector;
 	auto targetRect = getRect(nosePos, WorldDim(4, 4), renderState);
 	SDL_RenderFillRect(renderState.renderer, &targetRect);
 
-	auto tailPos = plane.pos - 3 * WorldDim(cos(heading), sin(heading));
+	// draw tail
+	auto tailPos = plane.pos - 3 * headingVector;
 	targetRect = getRect(tailPos, WorldDim(6, 6), renderState);
 	SDL_RenderFillRect(renderState.renderer, &targetRect);
+
+	if (renderState.debugRender) {
+		// draw heading indicator
+		auto desiredHeadingVector = WorldDim(
+			cos(plane.desiredHeading),
+			sin(plane.desiredHeading)
+		);
+		SDL_SetRenderDrawColor(renderState.renderer, 0xff, 0, 0, 0xff);
+		targetRect = getRect(
+			plane.pos + 100 * desiredHeadingVector,
+			WorldDim(10, 10),
+			renderState
+		);
+		SDL_RenderFillRect(renderState.renderer, &targetRect);
+
+		// print debug text for heading, desired heading
+		SDL_SetRenderDrawColor(
+			renderState.renderer,
+			0xff, 0xff, 0xff, 0xff
+		);
+		drawText(
+			renderState,
+			to!string(plane.desiredHeading),
+			renderState.debugTextFont,
+			0, 0
+		);
+		drawText(
+			renderState,
+			to!string(plane.heading),
+			renderState.debugTextFont,
+			0, 0
+		);
+	}
 }
 
 SDL_Rect getRect(WorldLoc center, WorldDim dim, RenderState renderState) {

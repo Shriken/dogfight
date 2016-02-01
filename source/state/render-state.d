@@ -17,6 +17,8 @@ class RenderState {
 	SDL_Window *window = null;
 	SDL_Renderer *renderer = null;
 
+	bool debugRender = false;
+
 	double scale = 1;
 	TTF_Font *debugTextFont = null;
 
