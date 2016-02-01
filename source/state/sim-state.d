@@ -7,7 +7,11 @@ class SimulationState {
 	Plane[] planes;
 	bool paused = false;
 
-	this() {
-		planes ~= new Plane(WorldLoc(0, 0), 0);
+	this() {}
+
+	Plane spawnNewPlayer() {
+		auto plane = new Plane(WorldLoc(0, 0), 0);
+		planes ~= plane;
+		return plane;
 	}
 }

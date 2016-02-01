@@ -1,7 +1,9 @@
 module render;
 
 import derelict.sdl2.sdl;
+import std.math;
 
+import actor.plane;
 import state.state;
 import state.render_state;
 import types;
@@ -14,15 +16,28 @@ void render(State state) {
 
 	SDL_SetRenderDrawColor(renderState.renderer, 0, 0xff, 0, 0xff);
 	foreach (plane; state.simState.planes) {
-		auto targetRect = plane.pos.toRect(WorldDim(10, 5), renderState);
-		SDL_RenderFillRect(renderState.renderer, &targetRect);
+		renderPlane(state, plane);
 	}
 
 	SDL_RenderPresent(renderState.renderer);
 }
 
-SDL_Rect toRect(WorldLoc pos, WorldDim dim, RenderState renderState) {
-	auto topLeft = (pos - dim / 2).toRenderLoc(renderState);
+void renderPlane(State state, Plane plane) {
+	auto renderState = state.renderState;
+	auto heading = plane.heading;
+
+	// draw nose
+	auto nosePos = plane.pos + 2 * WorldDim(cos(heading), sin(heading));
+	auto targetRect = getRect(nosePos, WorldDim(4, 4), renderState);
+	SDL_RenderFillRect(renderState.renderer, &targetRect);
+
+	auto tailPos = plane.pos - 3 * WorldDim(cos(heading), sin(heading));
+	targetRect = getRect(tailPos, WorldDim(6, 6), renderState);
+	SDL_RenderFillRect(renderState.renderer, &targetRect);
+}
+
+SDL_Rect getRect(WorldLoc center, WorldDim dim, RenderState renderState) {
+	auto topLeft = (center - dim / 2).toRenderLoc(renderState);
 	auto dimensions = dim.toRenderDim(renderState);
 	return SDL_Rect(
 		topLeft.x,

@@ -45,13 +45,13 @@ void handleControllerInput(State state, SDL_Event event) {
 	import std.stdio;
 	switch (event.type) {
 		case SDL_CONTROLLERAXISMOTION:
-			writeln("controller axis motion");
+			auto player = state.getPlayer(event.caxis.which);
+			player.handleStickMotion(event.caxis);
 			break;
 		case SDL_CONTROLLERBUTTONDOWN:
-			writeln("controller button pressed");
-			break;
 		case SDL_CONTROLLERBUTTONUP:
-			writeln("controller button released");
+			auto player = state.getPlayer(event.cbutton.which);
+			player.handleButton(event.cbutton);
 			break;
 		default:
 			break;
@@ -62,18 +62,15 @@ void handleControllerDeviceEvent(
 	State state,
 	SDL_ControllerDeviceEvent event
 ) {
-	import std.stdio;
 	switch (event.type) {
 		case SDL_CONTROLLERDEVICEADDED:
 			state.addPlayer(
 				event.which,
-				SDL_GameControllerOpen(0)
+				SDL_GameControllerOpen(0) // TODO use other controllers
 			);
-			writeln("player added");
 			break;
 		case SDL_CONTROLLERDEVICEREMOVED:
 			state.removePlayer(event.which);
-			writeln("player removed");
 			break;
 		default:
 			break;
