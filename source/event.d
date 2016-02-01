@@ -42,7 +42,6 @@ void handleKey(State state, SDL_KeyboardEvent event) {
 }
 
 void handleControllerInput(State state, SDL_Event event) {
-	import std.stdio;
 	switch (event.type) {
 		case SDL_CONTROLLERAXISMOTION:
 			auto player = state.getPlayer(event.caxis.which);

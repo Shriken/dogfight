@@ -10,7 +10,8 @@ class SimulationState {
 	this() {}
 
 	Plane spawnNewPlayer() {
-		auto plane = new Plane(WorldLoc(0, 0), 0);
+		auto l = planes.length;
+		auto plane = new Plane(WorldLoc(50 * planes.length, 0), 0);
 		planes ~= plane;
 		return plane;
 	}

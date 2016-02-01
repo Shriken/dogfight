@@ -43,7 +43,7 @@ class Player {
 		} else if (event.axis is SDL_CONTROLLER_AXIS_RIGHTX) {
 			rightStick.x = value;
 		} else if (event.axis is SDL_CONTROLLER_AXIS_RIGHTY) {
-			rightStick.y = -value;
+			rightStick.y = value;
 		}
 
 		bool isLeftStick = event.axis is SDL_CONTROLLER_AXIS_LEFTX ||
@@ -54,8 +54,6 @@ class Player {
 		if (isLeftStick) {
 			// adjust plane's desired heading
 			plane.desiredHeading = atan2(leftStick.y, leftStick.x);
-			import std.stdio;
-			writeln(plane.desiredHeading, " ", value);
 		}
 	}
 
