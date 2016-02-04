@@ -7,6 +7,8 @@ import std.stdio;
 
 import state.render_state;
 
+auto WHITE = SDL_Color(0xff, 0xff, 0xff, 0xff);
+
 void drawText(
 	RenderState state,
 	string text,
@@ -24,7 +26,7 @@ void drawText(
 	int x,
 	int y
 ) {
-	auto textTexture = state.getTextTexture(text, font, SDL_Color(0xff, 0xff, 0xff));
+	auto textTexture = state.getTextTexture(text, font, WHITE);
 	if (textTexture is null) {
 		writeln(to!string(SDL_GetError()));
 		return;
