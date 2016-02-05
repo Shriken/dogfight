@@ -66,10 +66,7 @@ void handleControllerDeviceEvent(
 ) {
 	switch (event.type) {
 		case SDL_CONTROLLERDEVICEADDED:
-			state.addPlayer(
-				event.which,
-				SDL_GameControllerOpen(0) // TODO use other controllers
-			);
+			state.addPlayer(event);
 			break;
 		case SDL_CONTROLLERDEVICEREMOVED:
 			state.removePlayer(event.which);

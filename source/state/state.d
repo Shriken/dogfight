@@ -20,8 +20,12 @@ class State {
 		simState = new SimulationState();
 	}
 
-	void addPlayer(ControllerID cid, SDL_GameController *controller) {
-		players ~= new Player(cid, controller, simState.spawnNewPlayer());
+	void addPlayer(SDL_ControllerDeviceEvent event) {
+		players ~= new Player(
+			event.which,
+			SDL_GameControllerOpen(event.which),
+			simState.spawnNewPlane()
+		);
 	}
 
 	Player getPlayer(ControllerID cid) {
