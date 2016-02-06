@@ -4,7 +4,7 @@ import types;
 import actor.plane;
 
 class SimulationState {
-	const double GRAVITIC_ACCELERATION = 0.2;
+	const double GRAVITIC_ACCELERATION = 0.1;
 
 	Plane[] planes;
 	bool paused = false;

@@ -46,12 +46,13 @@ class Player {
 		bool isRightStick = event.axis is SDL_CONTROLLER_AXIS_RIGHTX ||
 			event.axis is SDL_CONTROLLER_AXIS_RIGHTY;
 
-		if (
-			isLeftStick &&
-			leftStick.squaredLength() > DEADZONE_THRESHOLD ^^ 2
-		) {
-			// adjust plane's desired heading
-			plane.desiredHeading = atan2(-leftStick.y, leftStick.x);
+		if (isLeftStick) {
+			if (leftStick.squaredLength() > DEADZONE_THRESHOLD ^^ 2) {
+				// adjust plane's desired heading
+				plane.desiredHeading = atan2(-leftStick.y, leftStick.x);
+			} else {
+				plane.desiredHeading = plane.heading;
+			}
 		}
 	}
 
