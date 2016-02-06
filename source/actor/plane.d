@@ -5,9 +5,11 @@ import std.math;
 import types;
 
 class Plane {
-	static const double HEADING_ROT_SPEED = 0.1;
-	static const double ACCELERATION = 0.1;
-	static const double MAX_SPEED = 3;
+	static const double HEADING_ROT_SPEED = 0.2;
+	static const double DRAG_COEFFICIENT = 0.02;
+	static const double THRUST = 0.1;
+
+	double mass = 1;
 
 	WorldLoc pos;
 	WorldDim vel;

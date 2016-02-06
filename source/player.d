@@ -30,11 +30,6 @@ class Player {
 	void handleStickMotion(SDL_ControllerAxisEvent event) {
 		auto value = event.value;
 
-		// if it's in the deadzone, ignore it
-		if (-DEADZONE_THRESHOLD < value && value < DEADZONE_THRESHOLD) {
-			value = 0;
-		}
-
 		// store stick state
 		if (event.axis is SDL_CONTROLLER_AXIS_LEFTX) {
 			leftStick.x = value;
@@ -51,9 +46,12 @@ class Player {
 		bool isRightStick = event.axis is SDL_CONTROLLER_AXIS_RIGHTX ||
 			event.axis is SDL_CONTROLLER_AXIS_RIGHTY;
 
-		if (isLeftStick) {
+		if (
+			isLeftStick &&
+			leftStick.squaredLength() > DEADZONE_THRESHOLD ^^ 2
+		) {
 			// adjust plane's desired heading
-			plane.desiredHeading = atan2(leftStick.y, leftStick.x);
+			plane.desiredHeading = atan2(-leftStick.y, leftStick.x);
 		}
 	}
 

@@ -27,18 +27,15 @@ void render(State state) {
 
 void renderPlane(State state, Plane plane) {
 	auto renderState = state.renderState;
-	auto heading = plane.heading;
-
-	auto headingVector = WorldDim(cos(heading), sin(heading));
 
 	// draw nose
 	SDL_SetRenderDrawColor(renderState.renderer, 0, 0xff, 0, 0xff);
-	auto nosePos = plane.pos + 2 * headingVector;
+	auto nosePos = plane.pos + 2 * plane.headingVector;
 	auto targetRect = getRect(nosePos, WorldDim(4, 4), renderState);
 	SDL_RenderFillRect(renderState.renderer, &targetRect);
 
 	// draw tail
-	auto tailPos = plane.pos - 3 * headingVector;
+	auto tailPos = plane.pos - 3 * plane.headingVector;
 	targetRect = getRect(tailPos, WorldDim(6, 6), renderState);
 	SDL_RenderFillRect(renderState.renderer, &targetRect);
 
@@ -77,6 +74,7 @@ void renderPlane(State state, Plane plane) {
 }
 
 SDL_Rect getRect(WorldLoc center, WorldDim dim, RenderState renderState) {
+	center.y = -center.y;
 	auto topLeft = (center - dim / 2).toRenderLoc(renderState);
 	auto dimensions = dim.toRenderDim(renderState);
 	return SDL_Rect(

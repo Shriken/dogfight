@@ -13,7 +13,7 @@ static this() {
 }
 
 class RenderState {
-	RenderDim windowDimensions = RenderDim(800, 600);
+	RenderDim windowDimensions = RenderDim(1200, 800);
 	SDL_Window *window = null;
 	SDL_Renderer *renderer = null;
 
