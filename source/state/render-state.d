@@ -45,6 +45,8 @@ class RenderState {
 			);
 		}
 
+		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+
 		// determine the scale we're working at
 		int x, y;
 		SDL_GL_GetDrawableSize(window, &x, &y);
