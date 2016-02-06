@@ -7,7 +7,7 @@ import types;
 
 class Plane {
 	static const double MAX_SPEED = 4;
-	static const double THRUST = 0.4;
+	static const double THRUST = 0.1;
 
 	double mass = 1;
 	WorldLoc pos;

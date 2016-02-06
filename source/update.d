@@ -15,16 +15,26 @@ void update(SimulationState state) {
 		plane.pos += plane.vel;
 
 		auto headingVector = plane.headingVector;
+		auto graviticAccel = WorldDim(
+			0,
+			-state.GRAVITIC_ACCELERATION
+		);
 		if (plane.engineOn) {
+			graviticAccel *= 0.2;
 			auto thrustForce = plane.thrust * headingVector;
 			plane.vel += thrustForce / plane.mass;
-		} else {
-			auto graviticAccel = WorldDim(0, -state.GRAVITIC_ACCELERATION);
-			plane.vel += graviticAccel;
 		}
+		plane.vel += graviticAccel;
 
-		if (plane.vel.squaredLength() > Plane.MAX_SPEED ^^ 2) {
-			plane.vel *= 0.9;
+		if (state.useDrag) {
+			double dragForceMag = plane.vel.squaredLength() *
+				state.DRAG_COEFFICIENT;
+			plane.vel -= dragForceMag * plane.vel.normalized()
+				/ plane.mass;
+		} else {
+			if (plane.vel.squaredLength() > Plane.MAX_SPEED ^^ 2) {
+				plane.vel *= 0.9;
+			}
 		}
 
 		// update plane heading

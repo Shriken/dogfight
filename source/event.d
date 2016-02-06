@@ -39,6 +39,10 @@ void handleKey(State state, SDL_KeyboardEvent event) {
 			// restart
 			state.restart();
 			break;
+		case SDLK_z:
+			// toggle drag vs max speed
+			state.simState.useDrag = !state.simState.useDrag;
+			break;
 		default:
 			break;
 	}
