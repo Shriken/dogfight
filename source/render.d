@@ -60,7 +60,7 @@ void renderPlane(State state, Plane plane) {
 		);
 		drawText(
 			renderState,
-			to!string(plane.desiredHeading),
+			to!string(plane.pos),
 			renderState.debugTextFont,
 			0, 0
 		);

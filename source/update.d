@@ -1,5 +1,6 @@
 module update;
 
+import gfm.math.vector;
 import std.math;
 
 import actor.plane;
@@ -14,30 +15,20 @@ void update(SimulationState state) {
 		plane.pos += plane.vel;
 
 		auto headingVector = plane.headingVector;
-
-		auto thrustForce = Plane.THRUST * headingVector;
+		auto thrustForce = plane.thrust * headingVector;
 		auto dragForce = -plane.vel * Plane.DRAG_COEFFICIENT;
 
-		double gForceMag = state.GRAVITIC_ACCELERATION * plane.mass;
-		auto graviticForce = WorldDim(0, -gForceMag);
-		auto liftForce = gForceMag * WorldDim(
-			sin(plane.heading),
-			cos(plane.heading)
-		);
-
-		plane.vel += (
-			thrustForce + dragForce + graviticForce + liftForce
-		) / plane.mass;
+		plane.vel += (thrustForce + dragForce) / plane.mass;
 
 		// update plane heading
 		auto headingDiff = (plane.desiredHeading - plane.heading)
 			.mod(2 * PI);
 		headingDiff -= (headingDiff > PI) ? 2 * PI : 0;
 		if (abs(headingDiff) > EPSILON) {
-			if (abs(headingDiff) < Plane.HEADING_ROT_SPEED) {
+			if (abs(headingDiff) < plane.headingRotSpeed) {
 				plane.heading = plane.desiredHeading;
 			} else {
-				plane.heading += Plane.HEADING_ROT_SPEED *
+				plane.heading += plane.headingRotSpeed *
 					(headingDiff > 0 ? 1 : -1);
 			}
 		}

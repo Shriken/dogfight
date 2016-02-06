@@ -55,5 +55,6 @@ class Player {
 		}
 	}
 
-	void handleButton(SDL_ControllerButtonEvent event) {}
+	void handleButton(SDL_ControllerButtonEvent event) {
+	}
 }
