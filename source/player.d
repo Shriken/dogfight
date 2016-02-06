@@ -56,5 +56,14 @@ class Player {
 	}
 
 	void handleButton(SDL_ControllerButtonEvent event) {
+		if (event.state is SDL_PRESSED) {
+			switch(event.button) {
+				case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+					plane.engineOn = !plane.engineOn;
+					break;
+				default:
+					break;
+			}
+		}
 	}
 }

@@ -28,8 +28,9 @@ void render(State state) {
 void renderPlane(State state, Plane plane) {
 	auto renderState = state.renderState;
 
+	setRenderDrawColor(renderState.renderer, plane.color);
+
 	// draw nose
-	SDL_SetRenderDrawColor(renderState.renderer, 0, 0xff, 0, 0xff);
 	auto nosePos = plane.pos + 2 * plane.headingVector;
 	auto targetRect = getRect(nosePos, WorldDim(4, 4), renderState);
 	SDL_RenderFillRect(renderState.renderer, &targetRect);

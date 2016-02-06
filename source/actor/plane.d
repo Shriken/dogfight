@@ -1,12 +1,13 @@
 module actor.plane;
 
+import derelict.sdl2.sdl;
 import std.math;
 
 import types;
 
 class Plane {
-	static const double DRAG_COEFFICIENT = 0.02;
-	static const double THRUST = 0.1;
+	static const double MAX_SPEED = 4;
+	static const double THRUST = 0.2;
 
 	double mass = 1;
 	WorldLoc pos;
@@ -36,6 +37,14 @@ class Plane {
 			return THRUST;
 		} else {
 			return 0;
+		}
+	}
+
+	SDL_Color color() {
+		if (engineOn) {
+			return SDL_Color(0, 0xff, 0, 0xff);
+		} else {
+			return SDL_Color(0, 0xaf, 0, 0xff);
 		}
 	}
 }

@@ -9,6 +9,16 @@ import state.render_state;
 
 auto WHITE = SDL_Color(0xff, 0xff, 0xff, 0xff);
 
+void setRenderDrawColor(SDL_Renderer *renderer, SDL_Color color) {
+	SDL_SetRenderDrawColor(
+		renderer,
+		color.r,
+		color.g,
+		color.b,
+		color.a
+	);
+}
+
 void drawText(
 	RenderState state,
 	string text,
