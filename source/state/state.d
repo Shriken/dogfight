@@ -18,6 +18,9 @@ class State {
 
 	void restart() {
 		simState = new SimulationState();
+		foreach (player; players) {
+			player.plane = simState.spawnNewPlane();
+		}
 	}
 
 	void addPlayer(SDL_ControllerDeviceEvent event) {

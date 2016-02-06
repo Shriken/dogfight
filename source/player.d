@@ -28,6 +28,10 @@ class Player {
 	}
 
 	void handleStickMotion(SDL_ControllerAxisEvent event) {
+		if (plane is null) {
+			return;
+		}
+
 		auto value = event.value;
 
 		// store stick state
@@ -57,6 +61,10 @@ class Player {
 	}
 
 	void handleButton(SDL_ControllerButtonEvent event) {
+		if (plane is null) {
+			return;
+		}
+
 		if (event.state is SDL_PRESSED) {
 			switch(event.button) {
 				case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:

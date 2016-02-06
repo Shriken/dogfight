@@ -12,7 +12,6 @@ class SimulationState {
 	bool useDrag = true;
 
 	Plane spawnNewPlane() {
-		auto l = planes.length;
 		auto plane = new Plane(
 			WorldLoc(50 * planes.length, 0),
 			0
