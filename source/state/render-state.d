@@ -46,6 +46,11 @@ class RenderState {
 		}
 
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+		SDL_GetWindowSize(
+			window,
+			&windowDimensions.x,
+			&windowDimensions.y
+		);
 
 		// determine the scale we're working at
 		int x, y;
