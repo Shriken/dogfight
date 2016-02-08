@@ -22,16 +22,6 @@ void render(State state) {
 		renderPlane(state, plane);
 	}
 
-	if (renderState.debugRender) {
-		renderState.renderer.setRenderDrawColor(WHITE);
-		drawText(
-			renderState,
-			to!string(state.players[0].leftStick),
-			renderState.debugTextFont,
-			0, 20
-		);
-	}
-
 	SDL_RenderPresent(renderState.renderer);
 }
 

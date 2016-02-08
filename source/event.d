@@ -2,7 +2,9 @@ module event;
 
 import derelict.sdl2.sdl;
 
-import player;
+import player.gamepad_player;
+import player.keyboard_player;
+import player.player;
 import state.state;
 
 void handleEvent(State state, SDL_Event event) {
@@ -11,7 +13,9 @@ void handleEvent(State state, SDL_Event event) {
 			state.running = false;
 			break;
 		case SDL_KEYUP:
-			handleKey(state, event.key);
+			if (!handleKey(state, event.key)) {
+				state.keyboardPlayer().handleInput(event);
+			}
 			break;
 		case SDL_CONTROLLERDEVICEADDED:
 		case SDL_CONTROLLERDEVICEREMOVED:
@@ -20,48 +24,40 @@ void handleEvent(State state, SDL_Event event) {
 		case SDL_CONTROLLERAXISMOTION:
 		case SDL_CONTROLLERBUTTONDOWN:
 		case SDL_CONTROLLERBUTTONUP:
-			handleControllerInput(state, event);
+			state.getGamepadPlayer(event.caxis.which)
+				.handleInput(event);
 			break;
 		default:
 			break;
 	}
 }
 
-void handleKey(State state, SDL_KeyboardEvent event) {
+// returns true if key used
+bool handleKey(State state, SDL_KeyboardEvent event) {
 	switch (event.keysym.sym) {
 		case SDLK_q:
 			state.running = false;
 			break;
+
 		case SDLK_d:
 			state.renderState.debugRender = !state.renderState.debugRender;
 			break;
+
 		case SDLK_RIGHTBRACKET:
 			// restart
 			state.restart();
 			break;
+
 		case SDLK_z:
 			// toggle drag vs max speed
 			state.simState.useDrag = !state.simState.useDrag;
 			break;
-		default:
-			break;
-	}
-}
 
-void handleControllerInput(State state, SDL_Event event) {
-	switch (event.type) {
-		case SDL_CONTROLLERAXISMOTION:
-			auto player = state.getPlayer(event.caxis.which);
-			player.handleStickMotion(event.caxis);
-			break;
-		case SDL_CONTROLLERBUTTONDOWN:
-		case SDL_CONTROLLERBUTTONUP:
-			auto player = state.getPlayer(event.cbutton.which);
-			player.handleButton(event.cbutton);
-			break;
 		default:
-			break;
+			return false;
 	}
+
+	return true;
 }
 
 void handleControllerDeviceEvent(
@@ -70,10 +66,10 @@ void handleControllerDeviceEvent(
 ) {
 	switch (event.type) {
 		case SDL_CONTROLLERDEVICEADDED:
-			state.addPlayer(event);
+			state.addGamepadPlayer(event);
 			break;
 		case SDL_CONTROLLERDEVICEREMOVED:
-			state.removePlayer(event.which);
+			state.removeGamepadPlayer(event.which);
 			break;
 		default:
 			break;
