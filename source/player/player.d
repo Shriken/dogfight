@@ -17,7 +17,7 @@ abstract class Player {
 	Plane plane = null;
 	PlayerType type;
 
-	this(PlayerID id, Plane plane) {
+	this(PlayerID id, Plane plane, PlayerType type) {
 		this.id = id;
 		this.plane = plane;
 	}

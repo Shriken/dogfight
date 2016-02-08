@@ -6,6 +6,8 @@ import std.math;
 
 import actor.plane;
 import misc.utils;
+import player.keyboard_player;
+import player.player;
 import render_utils;
 import state.state;
 import state.render_state;
@@ -20,6 +22,10 @@ void render(State state) {
 	SDL_SetRenderDrawColor(renderState.renderer, 0, 0xff, 0, 0xff);
 	foreach (plane; state.simState.planes) {
 		renderPlane(state, plane);
+	}
+
+	foreach (player; state.players) {
+		renderPlayer(state, player);
 	}
 
 	SDL_RenderPresent(renderState.renderer);
@@ -71,6 +77,25 @@ void renderPlane(State state, Plane plane) {
 			renderState.debugTextFont,
 			0, 10
 		);
+	}
+}
+
+void renderPlayer(State state, Player player) {
+	auto renderState = state.renderState;
+	auto plane = player.plane;
+
+	if (renderState.debugRender) {
+		if (player.type is PlayerType.keyboard) {
+			auto keyboardPlayer = cast(KeyboardPlayer)player;
+
+			SDL_SetRenderDrawColor(renderState.renderer, 0, 0xff, 0, 0xff);
+			auto targetRect = getRect(
+				plane.pos + 50 * keyboardPlayer.moveDir,
+				WorldDim(10, 10),
+				renderState
+			);
+			SDL_RenderFillRect(renderState.renderer, &targetRect);
+		}
 	}
 }
 

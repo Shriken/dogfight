@@ -24,7 +24,7 @@ class GamepadPlayer : Player {
 		SDL_GameController *controller,
 		Plane plane
 	) {
-		super(id, plane);
+		super(id, plane, PlayerType.gamepad);
 		this.cid = cid;
 		this.controller = controller;
 	}
