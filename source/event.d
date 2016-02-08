@@ -13,6 +13,7 @@ void handleEvent(State state, SDL_Event event) {
 			state.running = false;
 			break;
 		case SDL_KEYUP:
+		case SDL_KEYDOWN:
 			if (!handleKey(state, event.key)) {
 				state.keyboardPlayer().handleInput(event);
 			}
@@ -34,12 +35,16 @@ void handleEvent(State state, SDL_Event event) {
 
 // returns true if key used
 bool handleKey(State state, SDL_KeyboardEvent event) {
+	if (event.state is SDL_RELEASED) {
+		return false;
+	}
+
 	switch (event.keysym.sym) {
-		case SDLK_q:
+		case SDLK_ESCAPE:
 			state.running = false;
 			break;
 
-		case SDLK_d:
+		case SDLK_o:
 			state.renderState.debugRender = !state.renderState.debugRender;
 			break;
 
