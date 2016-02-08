@@ -88,14 +88,13 @@ class GamepadPlayer : Player {
 			return;
 		}
 
-		if (event.state is SDL_PRESSED) {
-			switch(event.button) {
-				case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
-					plane.engineOn = !plane.engineOn;
-					break;
-				default:
-					break;
-			}
+		bool buttonPressed = event.state is SDL_PRESSED;
+		switch (event.button) {
+			case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+				plane.engineOn = !buttonPressed;
+				break;
+			default:
+				break;
 		}
 	}
 }

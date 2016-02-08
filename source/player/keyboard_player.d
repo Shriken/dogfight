@@ -62,9 +62,7 @@ class KeyboardPlayer : Player {
 				break;
 
 			case SDLK_j:
-				if (keyDown) {
-					plane.engineOn = !plane.engineOn;
-				}
+				plane.engineOn = !keyDown;
 				break;
 
 			default:
