@@ -1,5 +1,7 @@
 module state.sim_state;
 
+import std.algorithm;
+
 import actor.bullet;
 import actor.plane;
 import types;
@@ -19,5 +21,12 @@ class SimulationState {
 		);
 		planes ~= plane;
 		return plane;
+	}
+
+	void removePlane(Plane plane) {
+		auto index = planes.countUntil(plane);
+		if (index > -1) {
+			planes = planes.remove(index);
+		}
 	}
 }

@@ -69,7 +69,9 @@ class State {
 	void removeGamepadPlayer(ControllerID cid) {
 		auto i = players.countUntil!"a.id == b"(getPlayerID(cid));
 		if (i > -1) {
+			auto player = players[i];
 			players = players.remove(i);
+			simState.removePlane(player.plane);
 		}
 	}
 }
