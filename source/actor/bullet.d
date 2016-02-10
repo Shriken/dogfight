@@ -8,7 +8,7 @@ class Bullet {
 	WorldLoc pos;
 	WorldDim vel = WorldDim(0, 0);
 
-	double speed = 6;
+	double speed = 8;
 	double rad = 5;
 
 	bool dead = false;

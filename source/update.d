@@ -13,8 +13,12 @@ void update(SimulationState state) {
 	foreach (plane; state.planes) {
 		plane.updateMovement(state);
 
-		if (plane.engineOn) {
-			state.bullets ~= plane.fire();
+		if (plane.shouldFire()) {
+			if (plane.engineOn) {
+				state.bullets ~= plane.fire();
+			}
+		} else {
+			plane.timeToFire -= 1;
 		}
 	}
 

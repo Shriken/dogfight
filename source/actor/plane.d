@@ -54,6 +54,9 @@ class Plane {
 	bool engineOn = true;
 	bool dead = false;
 
+	double timeBetweenShots = 5;
+	double timeToFire = 0;
+
 	private Hitbox[2] planeHitboxes = [
 		Hitbox(WorldDim(2, 0), 2), // nose
 		Hitbox(WorldDim(-3, 0), 3), // tail
@@ -85,6 +88,8 @@ class Plane {
 			return SDL_Color(0, 0xaf, 0, 0xff);
 		}
 	}
+
+	@property bool shouldFire() { return timeToFire <= 0; }
 
 	this(WorldLoc pos, double heading) {
 		this.pos = pos;
@@ -125,6 +130,7 @@ class Plane {
 	}
 
 	Bullet fire() {
+		timeToFire = timeBetweenShots;
 		return new Bullet(
 			pos + this.headingVector * 15,
 			heading
