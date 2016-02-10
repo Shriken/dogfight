@@ -27,6 +27,7 @@ class GamepadPlayer : Player {
 		super(id, plane, PlayerType.gamepad);
 		this.cid = cid;
 		this.controller = controller;
+		this.plane = plane;
 	}
 
 	~this() {
@@ -38,10 +39,9 @@ class GamepadPlayer : Player {
 			case SDL_CONTROLLERAXISMOTION:
 				handleStickMotion(event.caxis);
 				break;
+			case SDL_CONTROLLERBUTTONUP:
 			case SDL_CONTROLLERBUTTONDOWN:
 				handleButton(event.cbutton);
-				break;
-			case SDL_CONTROLLERBUTTONUP:
 				break;
 			default:
 				throw new Exception(
