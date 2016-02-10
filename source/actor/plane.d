@@ -62,6 +62,30 @@ class Plane {
 		return HitboxRange(planeHitboxes, heading);
 	}
 
+	@property double headingRotSpeed() {
+		if (engineOn) {
+			return 0.05;
+		} else {
+			return 0.2;
+		}
+	}
+
+	@property double thrust() {
+		if (engineOn) {
+			return THRUST;
+		} else {
+			return 0;
+		}
+	}
+
+	@property SDL_Color color() {
+		if (engineOn) {
+			return SDL_Color(0, 0xff, 0, 0xff);
+		} else {
+			return SDL_Color(0, 0xaf, 0, 0xff);
+		}
+	}
+
 	this(WorldLoc pos, double heading) {
 		this.pos = pos;
 		this.heading = heading;
@@ -121,30 +145,6 @@ class Plane {
 		}
 
 		return false;
-	}
-
-	double headingRotSpeed() {
-		if (engineOn) {
-			return 0.05;
-		} else {
-			return 0.2;
-		}
-	}
-
-	double thrust() {
-		if (engineOn) {
-			return THRUST;
-		} else {
-			return 0;
-		}
-	}
-
-	SDL_Color color() {
-		if (engineOn) {
-			return SDL_Color(0, 0xff, 0, 0xff);
-		} else {
-			return SDL_Color(0, 0xaf, 0, 0xff);
-		}
 	}
 }
 
