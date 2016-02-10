@@ -4,6 +4,7 @@ import derelict.sdl2.sdl;
 import std.conv;
 import std.math;
 
+import actor.bullet;
 import actor.plane;
 import misc.utils;
 import player.keyboard_player;
@@ -21,11 +22,15 @@ void render(State state) {
 
 	SDL_SetRenderDrawColor(renderState.renderer, 0, 0xff, 0, 0xff);
 	foreach (plane; state.simState.planes) {
-		renderPlane(state, plane);
+		state.renderPlane(plane);
+	}
+
+	foreach (bullet; state.simState.bullets) {
+		state.renderBullet(bullet);
 	}
 
 	foreach (player; state.players) {
-		renderPlayer(state, player);
+		state.renderPlayer(player);
 	}
 
 	SDL_RenderPresent(renderState.renderer);
@@ -36,15 +41,14 @@ void renderPlane(State state, Plane plane) {
 
 	setRenderDrawColor(renderState.renderer, plane.color);
 
-	// draw nose
-	auto nosePos = plane.pos + 2 * plane.headingVector;
-	auto targetRect = getRect(nosePos, WorldDim(4, 4), renderState);
-	SDL_RenderFillRect(renderState.renderer, &targetRect);
-
-	// draw tail
-	auto tailPos = plane.pos - 3 * plane.headingVector;
-	targetRect = getRect(tailPos, WorldDim(6, 6), renderState);
-	SDL_RenderFillRect(renderState.renderer, &targetRect);
+	foreach (hitbox; plane.hitboxes) {
+		auto targetRect = getRect(
+			plane.pos + hitbox.offset,
+			2 * WorldDim(hitbox.rad, hitbox.rad),
+			renderState
+		);
+		SDL_RenderFillRect(renderState.renderer, &targetRect);
+	}
 
 	if (renderState.debugRender) {
 		// draw heading indicator
@@ -53,7 +57,7 @@ void renderPlane(State state, Plane plane) {
 			sin(plane.desiredHeading)
 		);
 		SDL_SetRenderDrawColor(renderState.renderer, 0xff, 0, 0, 0xff);
-		targetRect = getRect(
+		auto targetRect = getRect(
 			plane.pos + 100 * desiredHeadingVector,
 			WorldDim(10, 10),
 			renderState
@@ -78,6 +82,18 @@ void renderPlane(State state, Plane plane) {
 			0, 10
 		);
 	}
+}
+
+void renderBullet(State state, Bullet bullet) {
+	auto renderState = state.renderState;
+
+	SDL_SetRenderDrawColor(renderState.renderer, 0xff, 0xff, 0, 0xff);
+	auto targetRect = getRect(
+		bullet.pos,
+		WorldDim(bullet.rad, bullet.rad),
+		renderState
+	);
+	SDL_RenderFillRect(renderState.renderer, &targetRect);
 }
 
 void renderPlayer(State state, Player player) {

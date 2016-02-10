@@ -1,15 +1,16 @@
 module state.sim_state;
 
-import types;
+import actor.bullet;
 import actor.plane;
+import types;
 
 class SimulationState {
 	const double GRAVITIC_ACCELERATION = 0.1;
 	const double DRAG_COEFFICIENT = 0.002;
 
 	Plane[] planes;
+	Bullet[] bullets;
 	bool paused = false;
-	bool useDrag = true;
 
 	Plane spawnNewPlane() {
 		auto plane = new Plane(

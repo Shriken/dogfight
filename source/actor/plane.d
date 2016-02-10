@@ -3,12 +3,46 @@ module actor.plane;
 import derelict.sdl2.sdl;
 import std.math;
 
+import actor.bullet;
 import misc.utils;
 import state.sim_state;
 import types;
 
+struct Hitbox {
+	WorldDim offset;
+	double rad;
+}
+
+struct HitboxRange {
+	Hitbox[] hitboxes;
+	double heading;
+
+	this(Hitbox[] hitboxes, double heading) {
+		this.hitboxes = hitboxes;
+		this.heading = heading;
+	}
+
+	@property bool empty() {
+		return hitboxes.length == 0;
+	}
+
+	@property Hitbox front() {
+		auto hitbox = hitboxes[0];
+		auto offset = hitbox.offset;
+
+		hitbox.offset = WorldDim(
+			cos(heading) * offset.x - sin(heading) * offset.y,
+			sin(heading) * offset.x + cos(heading) * offset.y,
+		);
+		return hitbox;
+	}
+
+	@property void popFront() {
+		hitboxes = hitboxes[1 .. $];
+	}
+}
+
 class Plane {
-	static const double MAX_SPEED = 4;
 	static const double THRUST = 0.1;
 
 	double mass = 1;
@@ -18,6 +52,15 @@ class Plane {
 
 	double desiredHeading = 0;
 	bool engineOn = true;
+	bool dead = false;
+
+	private Hitbox[2] planeHitboxes = [
+		Hitbox(WorldDim(2, 0), 2), // nose
+		Hitbox(WorldDim(-3, 0), 3), // tail
+	];
+	@property HitboxRange hitboxes() {
+		return HitboxRange(planeHitboxes, heading);
+	}
 
 	this(WorldLoc pos, double heading) {
 		this.pos = pos;
@@ -29,6 +72,7 @@ class Plane {
 	void updateMovement(SimulationState state) {
 		pos += vel;
 
+		// gravity and thrust
 		auto graviticAccel = WorldDim(0, -state.GRAVITIC_ACCELERATION);
 		if (engineOn) {
 			graviticAccel *= 0.2;
@@ -37,16 +81,10 @@ class Plane {
 		}
 		vel += graviticAccel;
 
-		if (state.useDrag) {
-			double dragForceMag = vel.squaredLength() *
-				state.DRAG_COEFFICIENT;
-			vel -= dragForceMag * vel.normalized()
-				/ mass;
-		} else {
-			if (vel.squaredLength() > Plane.MAX_SPEED ^^ 2) {
-				vel *= 0.9;
-			}
-		}
+		// drag force
+		double dragForceMag = vel.squaredLength() *
+			state.DRAG_COEFFICIENT;
+		vel -= dragForceMag * vel.normalized() / mass;
 
 		// update plane heading
 		auto headingDiff = (desiredHeading - heading)
@@ -60,6 +98,29 @@ class Plane {
 					(headingDiff > 0 ? 1 : -1);
 			}
 		}
+	}
+
+	Bullet fire() {
+		return new Bullet(
+			pos + this.headingVector * 15,
+			heading
+		);
+	}
+
+	void die() {
+		dead = true;
+	}
+
+	bool collidesWith(Bullet bullet) {
+		foreach (hitbox; hitboxes) {
+			auto hitboxPos = pos + hitbox.offset;
+			auto squaredDist = (hitboxPos - bullet.pos).squaredLength();
+			if (squaredDist < (bullet.rad + hitbox.rad) ^^ 2) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	double headingRotSpeed() {
